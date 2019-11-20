@@ -4,6 +4,10 @@
 #import "RCTBridgeModule.h"
 #endif
 
-@interface SETcp : NSObject <RCTBridgeModule>
+#import "GCDAsyncSocket.h"
+
+@interface SETcp : NSObject <RCTBridgeModule, GCDAsyncSocketDelegate> {
+    GCDAsyncSocket *asyncSocket;
+}
 
 @end
