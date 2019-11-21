@@ -1,7 +1,7 @@
-#import "SETcp.h"
+#import "SyntheticTcp.h"
 #import "GCDAsyncSocket.h"
 
-@implementation SETcp
+@implementation SyntheticTcp
 
 RCT_EXPORT_MODULE()
 

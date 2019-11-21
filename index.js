@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native';
 
-const { SETcp } = NativeModules;
-export default SETcp;
+const { SyntheticTcp } = NativeModules;
+
+export default SyntheticTcp;

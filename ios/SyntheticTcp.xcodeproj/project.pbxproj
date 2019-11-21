@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3E7B58A1CC2AC0600A0062D /* SETcp.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* SETcp.m */; };
+		B3E7B58A1CC2AC0600A0062D /* SyntheticTcp.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* SyntheticTcp.m */; };
+		C1F3537E2386E8AB00171727 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C1F3537C2386E8AB00171727 /* GCDAsyncSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,10 +24,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		134814201AA4EA6300B7C361 /* libSETcp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSETcp.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F0C59D82383428B00A90B47 /* libReact-Core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-Core.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5881CC2AC0600A0062D /* SETcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SETcp.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* SETcp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SETcp.m; sourceTree = "<group>"; };
+		134814201AA4EA6300B7C361 /* libSyntheticTcp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSyntheticTcp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3E7B5881CC2AC0600A0062D /* SyntheticTcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyntheticTcp.h; sourceTree = "<group>"; };
+		B3E7B5891CC2AC0600A0062D /* SyntheticTcp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyntheticTcp.m; sourceTree = "<group>"; };
+		C1F3537C2386E8AB00171727 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		C1F3537D2386E8AB00171727 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,35 +45,28 @@
 		134814211AA4EA7D00B7C361 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libSETcp.a */,
+				134814201AA4EA6300B7C361 /* libSyntheticTcp.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		3F0C59D72383428B00A90B47 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3F0C59D82383428B00A90B47 /* libReact-Core.a */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* SETcp.h */,
-				B3E7B5891CC2AC0600A0062D /* SETcp.m */,
+				C1F3537D2386E8AB00171727 /* GCDAsyncSocket.h */,
+				C1F3537C2386E8AB00171727 /* GCDAsyncSocket.m */,
+				B3E7B5881CC2AC0600A0062D /* SyntheticTcp.h */,
+				B3E7B5891CC2AC0600A0062D /* SyntheticTcp.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
-				3F0C59D72383428B00A90B47 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* SETcp */ = {
+		58B511DA1A9E6C8500147676 /* SyntheticTcp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "SETcp" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "SyntheticTcp" */;
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
@@ -81,9 +76,9 @@
 			);
 			dependencies = (
 			);
-			name = SETcp;
+			name = SyntheticTcp;
 			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libSETcp.a */;
+			productReference = 134814201AA4EA6300B7C361 /* libSyntheticTcp.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -100,7 +95,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "SETcp" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "SyntheticTcp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -113,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* SETcp */,
+				58B511DA1A9E6C8500147676 /* SyntheticTcp */,
 			);
 		};
 /* End PBXProject section */
@@ -123,7 +118,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* SETcp.m in Sources */,
+				C1F3537E2386E8AB00171727 /* GCDAsyncSocket.m in Sources */,
+				B3E7B58A1CC2AC0600A0062D /* SyntheticTcp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,9 +230,8 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = SETcp;
+				PRODUCT_NAME = SyntheticTcp;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "arm64 arm64e armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
@@ -251,16 +246,15 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = SETcp;
+				PRODUCT_NAME = SyntheticTcp;
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "arm64 arm64e armv7 armv7s x86_64";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "SETcp" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "SyntheticTcp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -269,7 +263,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "SETcp" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "SyntheticTcp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,
