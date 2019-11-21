@@ -16,16 +16,6 @@ RCTResponseSenderBlock readCallback = NULL;
 RCTResponseSenderBlock writeCallback = NULL;
 RCTResponseSenderBlock connectCallback = NULL;
 
-RCT_EXPORT_METHOD(getPlatform:(RCTResponseSenderBlock)callback)
-{
-    
-    #if targetEnvironment(macCatalyst)
-        connectCallback(@[[NSNull null], [NSString stringWithFormat:@"macOS", host]]);
-    #else
-        connectCallback(@[[NSNull null], [NSString stringWithFormat:@"ios", host]]);
-    #endif
-}
-
 RCT_REMAP_METHOD(connect,
                  host:(NSString *)host
                  port:(nonnull NSNumber *)port
