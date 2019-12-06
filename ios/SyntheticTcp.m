@@ -33,7 +33,7 @@ RCT_REMAP_METHOD(connect,
     
     NSError *error = nil;
     if(![asyncSocket connectToHost:host onPort:port.shortValue viaInterface:NULL withTimeout:5 error:&error]) {
-        callback(@[@"Connection refused", [NSNull null]]);
+        callback(@[@"Connection was refused by the Comm Link", [NSNull null]]);
         return;
     }
 }
@@ -43,7 +43,7 @@ RCT_REMAP_METHOD(read,
                  callback:(RCTResponseSenderBlock)callback)
 {
     if(![asyncSocket isConnected]) {
-        callback(@[@"Connection has not been setup", [NSNull null]]);
+        callback(@[@"The connection between your device and the Comm Link has been lost", [NSNull null]]);
         return;
     }
     
@@ -56,7 +56,7 @@ RCT_REMAP_METHOD(write,
                  callback:(RCTResponseSenderBlock)callback)
 {
     if(![asyncSocket isConnected]) {
-        callback(@[@"Connection has not been setup", [NSNull null]]);
+        callback(@[@"The connection between your device and the Comm Link has been lost", [NSNull null]]);
         return;
     }
     
@@ -114,7 +114,7 @@ RCT_REMAP_METHOD(write,
     
     if(readCallback != NULL) {
 
-        readCallback(@[@"Unable to read information from the host", [NSNull null]]);
+        readCallback(@[@"Unable to read the response from the Comm Link", [NSNull null]]);
         readCallback = NULL;
     }
     
