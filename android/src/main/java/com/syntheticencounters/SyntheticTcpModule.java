@@ -30,8 +30,9 @@ public class SyntheticTcpModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void connect(String host, int port, Callback callback) {
+    public void connect(String host, int port, int timeout, Callback callback) {
 
+        // timeout not used for android but needed for method consistency across applications
         if(host == null) {
             callback.invoke("Missing required host and/or port", null);
             return;
@@ -80,8 +81,9 @@ public class SyntheticTcpModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void write(String string, Callback callback) {
+    public void write(String string, int timeout, Callback callback) {
 
+        // timeout not used for android but needed for method consistency across applications
         if(socket == null) {
             callback.invoke("Connection has not been setup", null);
             return;
