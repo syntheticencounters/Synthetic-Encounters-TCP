@@ -6,7 +6,7 @@
 
 #import "GCDAsyncSocket.h"
 
-@interface SyntheticTcp : NSObject <RCTBridgeModule> {
+@interface SyntheticTcp : NSObject <RCTBridgeModule, GCDAsyncSocketDelegate> {
     GCDAsyncSocket *asyncSocket;
 }
 

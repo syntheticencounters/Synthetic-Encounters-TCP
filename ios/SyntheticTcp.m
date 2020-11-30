@@ -12,66 +12,65 @@ RCT_EXPORT_MODULE()
 
 dispatch_queue_t mainQueue = NULL;
 long *tag = NULL;
-RCTResponseSenderBlock readCallback = NULL;
-RCTResponseSenderBlock writeCallback = NULL;
-RCTResponseSenderBlock connectCallback = NULL;
+
+RCTPromiseRejectBlock readReject = NULL;
+RCTPromiseResolveBlock readResolve = NULL;
+
+RCTPromiseRejectBlock writeReject = NULL;
+RCTPromiseResolveBlock writeResolve = NULL;
+
+RCTPromiseRejectBlock connectReject = NULL;
+RCTPromiseResolveBlock connectResolve = NULL;
+
 
 RCT_REMAP_METHOD(connect,
                  host:(NSString *)host
                  port:(nonnull NSNumber *)port
                  timeout:(nonnull NSNumber *)timeout
-                 callback:(RCTResponseSenderBlock)callback)
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject)
 {
-
+    
     if(host == NULL || port == NULL) {
-        callback(@[@"Missing required host and/or port", [NSNull null]]);
+        NSError *error = [ NSError errorWithDomain:@"com.commlink.OmniShieldApp2" code:500 userInfo: NULL ];
+        reject(@"error", @"Missing required props for connection", error);
         return;
     }
-
-    connectCallback = callback;
+   
+    connectResolve = resolve;
     mainQueue = dispatch_get_main_queue();
     asyncSocket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:mainQueue];
-
+    
     NSError *error = nil;
     if(![asyncSocket connectToHost:host onPort:port.shortValue viaInterface:NULL withTimeout:[timeout doubleValue] error:&error]) {
-        callback(@[@"Connection was refused by the Comm Link", [NSNull null]]);
+        reject(@"error", @"Connection was refused by the Comm Link", error);
         return;
     }
 }
 
 RCT_REMAP_METHOD(read,
                  timeout:(nonnull NSNumber *)timeout
-                 callback:(RCTResponseSenderBlock)callback)
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject)
 {
-        /*
-    if(![asyncSocket isConnected]) {
-        callback(@[@"The connection between your device and the Comm Link has been lost", [NSNull null]]);
-        return;
-    }
-         */
-
-    readCallback = callback;
+    readResolve = resolve;
     [asyncSocket readDataWithTimeout:[timeout doubleValue] tag:1];
 }
 
 RCT_REMAP_METHOD(write,
                  string:(NSString *)string
                  timeout:(nonnull NSNumber *)timeout
-                 callback:(RCTResponseSenderBlock)callback)
+                 resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject)
 {
-        /*
-    if(![asyncSocket isConnected]) {
-        callback(@[@"The connection between your device and the Comm Link has been lost", [NSNull null]]);
-        return;
-    }
-        */
-
+     
     if(string == NULL) {
-        callback(@[@"Missing required string for data", [NSNull null]]);
+        NSError *error = [ NSError errorWithDomain:@"com.commlink.OmniShieldApp2" code:500 userInfo: NULL ];
+        reject(@"error", @"Missing required props for connection", error);
         return;
     }
-
-    writeCallback = callback;
+    
+    writeResolve = resolve;
     NSData* data = [string dataUsingEncoding:NSUTF8StringEncoding];
     [asyncSocket writeData:data withTimeout:[timeout doubleValue] tag:2];
 }
@@ -79,40 +78,48 @@ RCT_REMAP_METHOD(write,
 - (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(UInt16)port
 {
     NSLog(@"sockettcp connect :%@", host);
-    if(connectCallback != NULL) {
-        connectCallback(@[[NSNull null], [NSString stringWithFormat:@"Connected to host %@", host]]);
+    if(connectResolve != NULL) {
+        connectResolve(@"Connected to host %@");
+        connectResolve = NULL;
     }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-    if(writeCallback != NULL) {
-        writeCallback(@[[NSNull null], [NSNull null]]);
+    if(writeResolve != NULL) {
+        writeResolve(@"Data written");
+        writeResolve = NULL;
     }
 }
 
 - (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag
 {
-    NSString *httpResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@", [NSString stringWithFormat:@"sockettcp response: %@", httpResponse]);
-    if(readCallback != NULL) {
-        readCallback(@[[NSNull null], httpResponse]);
+    NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"%@", [NSString stringWithFormat:@"sockettcp response: %@", response]);
+    
+    if(readResolve != NULL) {
+        readResolve(response);
+        readResolve = NULL;
     }
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock shouldTimeoutReadWithTag:(long)tag
 elapsed:(NSTimeInterval)elapsed bytesDone:(NSUInteger)length {
-
-    if(readCallback != NULL) {
-        readCallback(@[@"The connection to the Comm Link was unsuccessful. Please restart the Comm Link and try again", [NSNull null]]);
+    
+    if(readReject != NULL) {
+        NSError *error = [ NSError errorWithDomain:@"com.commlink.OmniShieldApp2" code:500 userInfo: NULL ];
+        readReject(@"error", @"Unable to communicate with the Comm Link", error);
+        readReject = NULL;
     }
 }
 
 - (void)socketDidDisconnect:(GCDAsyncSocket *)sock shouldTimeoutWriteWithTag:(long)tag
 elapsed:(NSTimeInterval)elapsed bytesDone:(NSUInteger)length {
-
-    if(writeCallback != NULL) {
-        writeCallback(@[@"The connection to the Comm Link was unsuccessful. Please restart the Comm Link and try again", [NSNull null]]);
+    
+    if(writeReject != NULL) {
+        NSError *error = [ NSError errorWithDomain:@"com.commlink.OmniShieldApp2" code:500 userInfo: NULL ];
+        writeReject(@"error", @"Unable to communicate with the Comm Link", error);
+        writeReject = NULL;
     }
 }
 
@@ -120,9 +127,11 @@ elapsed:(NSTimeInterval)elapsed bytesDone:(NSUInteger)length {
 {
     NSLog(@"sockettcp error");
     NSLog(@"%@", err.localizedDescription);
-    if(connectCallback) {
+    if(connectReject != NULL) {
         if(err.code == 3) {
-            connectCallback(@[@"The connection to the Comm Link has been lost. Please restart the Comm Link and try again", [NSNull null]]);
+            NSError *error = [ NSError errorWithDomain:@"com.commlink.OmniShieldApp2" code:500 userInfo: NULL ];
+            connectReject(@"error", @"The connection to the Comm Link has been lost", error);
+            connectReject = NULL;
         }
     }
 }
