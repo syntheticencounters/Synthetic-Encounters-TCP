@@ -3,7 +3,7 @@ package com.syntheticencounters;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -30,30 +30,30 @@ public class SyntheticTcpModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void connect(String host, int port, int timeout, Callback callback) {
+    public void connect(String host, int port, int timeout, final Promise promise) {
 
-        // timeout not used for android but needed for method consistency across applications
+        // timeout not used for android but needed for method consistency across platforms
         if(host == null) {
-            callback.invoke("Missing required host and/or port", null);
+            promise.reject("500", "Missing required host and/or port");
             return;
         }
 
         try {
             socket = new Socket(host,port);
             System.out.println("connected");
-            callback.invoke(null, null);
+            promise.resolve("Connected to host");
 
         } catch (IOException ex) {
             System.out.println(ex.toString());
-            callback.invoke("Connection refused", null);
+            promise.reject("500", "Connection refused");
         }
     }
 
     @ReactMethod
-    public void read(int timeout, Callback callback) {
+    public void read(int timeout, final Promise promise) {
 
         if(socket == null) {
-            callback.invoke("Connection has not been setup", null);
+            promise.reject("500", "Connection has not been setup");
             return;
         }
 
@@ -72,20 +72,20 @@ public class SyntheticTcpModule extends ReactContextBaseJavaModule {
             }
 
             System.out.println("finished reading");
-            callback.invoke(null, response);
+            promise.resolve(response);
 
         } catch (IOException | InterruptedException e) {
             System.out.println(e.toString());
-            callback.invoke("Unable to read the data received", null);
+            promise.reject("500", "Unable to read the data received");
         }
     }
 
     @ReactMethod
-    public void write(String string, int timeout, Callback callback) {
+    public void write(String string, int timeout, final Promise promise) {
 
         // timeout not used for android but needed for method consistency across applications
         if(socket == null) {
-            callback.invoke("Connection has not been setup", null);
+            promise.reject("500","Connection has not been setup");
             return;
         }
 
@@ -94,11 +94,11 @@ public class SyntheticTcpModule extends ReactContextBaseJavaModule {
             writer = new PrintWriter(socket.getOutputStream(), true);
             writer.println(string);
             writer.flush();
-            callback.invoke(null, null);
+            promise.resolve("Data written");
 
         } catch (IOException ex) {
             System.out.println(ex.toString());
-            callback.invoke("Unable to send the data to the receiver", null);
+            promise.reject("500", "Unable to communicate with the Comm Link");
         }
     }
 }
